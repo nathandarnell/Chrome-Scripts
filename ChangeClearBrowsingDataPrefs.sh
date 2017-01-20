@@ -1,14 +1,14 @@
 #!/bin/sh
 
-# SetChromeHomepage.sh
+# ChangeClearBrowsingDataPrefs.sh
 # Change Chrome Homepage
 
 # This script assumes that default preference files for all Chrome has been installed
 # with FUT/FEU options in Casper.
 
-# Define homepage
+# Define Preferences
 
-homepage='https://www.yourhomepage.com'
+preference='"clear_data":{"browsing_history":true,"cache":true,"content_licenses":true,"cookies":true,"download_history":true,"form_data":true,"hosted_apps_data":true,"passwords":true,"time_period":4},'
 
 # Stop all open browsers so settings are not over written by Coogle Chrome's open session (it re-writes every 1 min from memory)
 
@@ -22,14 +22,13 @@ for user in $(ls /Users | grep -v Shared | grep -v npsparcc | grep -v ".localize
 # Define Chrome Preference variable
 chromePrefs="/Users/$user/Library/Application Support/Google/Chrome/Default/Preferences"
 
-#Parse the Preferences json file to set the homepage
-sed -i '' 's|"startup_urls":"[A-F0-9]*"|"startup_urls":""|' $chromePrefs
-sed -i '' 's|"startup_urls":[[]"http[^"]*"[]]|"startup_urls":["$homepage"]|' $chromePrefs
-sed -i '' 's|"homepage":"http[^"]*"|"homepage":"$homepage"|' $chromePrefs
+#Parse the Preferences json file to set the checkboxes to checked and the time period for all time
+
+sed -i '' 's|"homepage":"http[^"]*"|"homepage":"$preference"|' $chromePrefs
 
 done
 
-# Set homepages in user template for future users
+# Set preferences in user template for future users
 
 # Chrome
 cp "/Users/$adminUser/Library/Application Support/Google/Chrome/Default/Preferences" "/System/Library/User Template/English.lproj/Library/Application Support/Google/Chrome/Default/Preferences"
